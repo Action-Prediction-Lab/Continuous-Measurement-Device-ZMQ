@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/cmd.v1.schema.json",
+  "title": "Continuous Measurement Device wire format, version 1",
+  "oneOf": [
+    {"$ref": "#/$defs/meta"},
+    {"$ref": "#/$defs/start"},
+    {"$ref": "#/$defs/tick"},
+    {"$ref": "#/$defs/button"},
+    {"$ref": "#/$defs/session_mark"},
+    {"$ref": "#/$defs/heartbeat"},
+    {"$ref": "#/$defs/stop"}
+  ],
+  "$defs": {
+    "_common": {
+      "type": "object",
+      "required": ["type", "seq", "t", "t_mono"],
+      "properties": {
+        "type":   {"type": "string"},
+        "seq":    {"type": "integer", "minimum": 0},
+        "t":      {"type": "number"},
+        "t_mono": {"type": "integer", "minimum": 0}
+      }
+    },
+    "meta": {
+      "allOf": [
+        {"$ref": "#/$defs/_common"},
+        {
+          "properties": {
+            "type":          {"const": "meta"},
+            "schema":        {"type": "string", "const": "cmd.v1"},
+            "device": {
+              "type": "object",
+              "required": ["vid", "pid", "name", "evdev_path"],
+              "properties": {
+                "vid":         {"type": "string"},
+                "pid":         {"type": "string"},
+                "name":        {"type": "string"},
+                "evdev_path":  {"type": "string"}
+              }
+            },
+            "host":           {"type": "string"},
+            "zmq_endpoint":   {"type": "string"},
+            "publisher_pid":  {"type": "integer"},
+            "session_id":     {"type": ["string", "null"]}
+          },
+          "required": ["schema", "device", "host", "zmq_endpoint", "publisher_pid", "session_id"]
+        }
+      ]
+    },
+    "start": {
+      "allOf": [
+        {"$ref": "#/$defs/_common"},
+        {
+          "properties": {
+            "type":     {"const": "start"},
+            "position": {"type": "integer"}
+          },
+          "required": ["position"]
+        }
+      ]
+    },
+    "tick": {
+      "allOf": [
+        {"$ref": "#/$defs/_common"},
+        {
+          "properties": {
+            "type":     {"const": "tick"},
+            "delta":    {"type": "integer", "enum": [-1, 1]},
+            "position": {"type": "integer"},
+            "raw_key":  {"type": "string"}
+          },
+          "required": ["delta", "position", "raw_key"]
+        }
+      ]
+    },
+    "button": {
+      "allOf": [
+        {"$ref": "#/$defs/_common"},
+        {
+          "properties": {
+            "type":   {"const": "button"},
+            "action": {"type": "string", "enum": ["press", "release"]},
+            "code":   {"type": "string"}
+          },
+          "required": ["action", "code"]
+        }
+      ]
+    },
+    "session_mark": {
+      "allOf": [
+        {"$ref": "#/$defs/_common"},
+        {
+          "properties": {
+            "type":       {"const": "session_mark"},
+            "phase":      {"type": "string", "enum": ["start", "end"]},
+            "session_id": {"type": "string"}
+          },
+          "required": ["phase", "session_id"]
+        }
+      ]
+    },
+    "heartbeat": {
+      "allOf": [
+        {"$ref": "#/$defs/_common"},
+        {
+          "properties": {
+            "type":     {"const": "heartbeat"},
+            "position": {"type": "integer"}
+          },
+          "required": ["position"]
+        }
+      ]
+    },
+    "stop": {
+      "allOf": [
+        {"$ref": "#/$defs/_common"},
+        {
+          "properties": {
+            "type":     {"const": "stop"},
+            "position": {"type": "integer"},
+            "reason":   {"type": "string", "enum": ["SIGTERM", "SIGINT", "device_disconnected", "unhandled_exception"]}
+          },
+          "required": ["position", "reason"]
+        }
+      ]
+    }
+  }
+}
