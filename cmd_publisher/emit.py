@@ -53,3 +53,12 @@ class Emitter:
         record = self._assemble(partial, kernel_t_mono_ns=None)
         self._pub.send_json(record, flags=zmq.NOBLOCK)
         return record
+
+    def emit_file_only(self, partial: dict) -> dict:
+        """Stamp and write to disk only (meta path)."""
+        record = self._assemble(partial, kernel_t_mono_ns=None)
+        line = json.dumps(record, separators=(",", ":"))
+        self._fp.write(line + "\n")
+        self._fp.flush()
+        os.fsync(self._fp.fileno())
+        return record
