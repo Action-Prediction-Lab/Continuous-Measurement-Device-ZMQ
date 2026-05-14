@@ -11,6 +11,7 @@ Linux with Docker and `docker compose`. A USB rotary-knob HID device plugged in;
 Plug in the USB knob.
 
 ```bash
+git clone https://github.com/Action-Prediction-Lab/Continuous-Measurement-Device-ZMQ.git
 cp .env.example .env
 docker compose up --build
 ```
