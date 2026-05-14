@@ -1,9 +1,6 @@
 # Log files
 logs/
 
-# Internal documentation
-docs/
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -172,6 +169,9 @@ venv.bak/
 
 # mkdocs documentation
 /site
+
+# Internal docs
+docs/superpowers/
 
 # mypy
 .mypy_cache/

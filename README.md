@@ -2,6 +2,8 @@
 
 Plug and play capture of continuous behavioural time series from consumer USB volume knobs (rotary encoder). The aforementioned time series is emitted both on a ZeroMQ PUB socket for live consumers and recorded to a JSONL trace file.
 
+Architecture notes are available at [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+
 ## Host requirements
 
 Linux with Docker and `docker compose`. A USB rotary-knob HID device plugged in; defaults to vendor:product `c001:1dea` (any volume-knob HID device works, set `DEVICE_VID` and `DEVICE_PID` in `.env` for a different device).
