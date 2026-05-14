@@ -139,3 +139,10 @@ def test_invalid_tick_delta_fails_schema(schema, common):
     record = {**common, "type": "tick", "delta": 2, "position": 2, "raw_key": "KEY_VOLUMEUP"}
     with pytest.raises(jsonschema.ValidationError):
         _validate(record, schema)
+
+
+def test_empty_session_id_fails_schema(schema, common):
+    # session_mark.session_id must be a non-empty string; matches publisher validation.
+    record = build_session_mark(**common, phase="start", session_id="")
+    with pytest.raises(jsonschema.ValidationError):
+        _validate(record, schema)
