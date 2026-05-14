@@ -9,7 +9,7 @@ services:
       - "${ZMQ_PORT:-5580}:${ZMQ_PORT:-5580}"
       - "${CONTROL_PORT:-5581}:${CONTROL_PORT:-5581}"
     environment:
-      - ZMQ_HOST=${ZMQ_HOST:-"*"}
+      - ZMQ_HOST=${ZMQ_HOST:-*}
       - ZMQ_PORT=${ZMQ_PORT:-5580}
       - CONTROL_PORT=${CONTROL_PORT:-5581}
       - LOG_DIR=/logs
