@@ -1,6 +1,6 @@
 # Continuous Measurement Device ZMQ
 
-We contribute a containerised publisher for capturing behavioural time series on consumer USB rotary-knob HID devices. The aforementioned time series is emitted both on a ZeroMQ PUB socket for live consumers and recorded to a JSONL trace file.
+Plug and play capture of continuous behavioural time series from consumer USB volume knobs (rotary encoder). The aforementioned time series is emitted both on a ZeroMQ PUB socket for live consumers and recorded to a JSONL trace file.
 
 ## Host requirements
 
