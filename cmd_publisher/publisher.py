@@ -287,15 +287,22 @@ class Publisher:
 
 
 def main() -> int:
-    cfg = Config()
+    try:
+        cfg = Config()
+    except ValueError as exc:
+        logger.error("invalid configuration: %s", exc)
+        return 3
+
     pub = Publisher(cfg)
     try:
         pub.setup()
     except DeviceNotFoundError as exc:
         logger.error("startup failed: %s", exc)
+        pub.teardown()
         return 2
-    except OSError as exc:
+    except (OSError, zmq.ZMQError) as exc:
         logger.error("startup failed (device busy or port in use): %s", exc)
+        pub.teardown()
         return 3
 
     try:

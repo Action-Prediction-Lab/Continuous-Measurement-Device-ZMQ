@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy only the publisher runtime. subscriber.py, schema/, and tests/ are host-side
+# Copy only the publisher runtime. subscriber.py, schema/, and tests/ are not needed at runtime.
 COPY __init__.py     ./cmd_publisher/__init__.py
 COPY publisher.py    ./cmd_publisher/publisher.py
 COPY translator.py   ./cmd_publisher/translator.py

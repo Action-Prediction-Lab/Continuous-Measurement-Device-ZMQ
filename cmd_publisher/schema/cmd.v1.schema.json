@@ -94,7 +94,7 @@
           "properties": {
             "type":       {"const": "session_mark"},
             "phase":      {"type": "string", "enum": ["start", "end"]},
-            "session_id": {"type": "string"}
+            "session_id": {"type": "string", "minLength": 1}
           },
           "required": ["phase", "session_id"]
         }

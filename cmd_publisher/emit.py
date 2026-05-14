@@ -55,11 +55,12 @@ class Emitter:
         return record
 
     def _send_best_effort(self, record: dict) -> None:
-        """Send the record on the wire. Drop silently on a slow subscriber
-        (zmq.Again) or after the asyncio loop has closed (RuntimeError)."""
+        """Send the record on the wire. Drop silently if the asyncio loop has
+        closed (RuntimeError, shutdown path). HWM drops happen inside the ZMQ
+        background thread."""
         try:
             self._pub.send_json(record, flags=zmq.NOBLOCK)
-        except (zmq.Again, RuntimeError):
+        except RuntimeError:
             pass
 
     def emit_file_only(self, partial: dict) -> dict:
