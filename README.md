@@ -60,6 +60,20 @@ s.send_json({"action": "session_mark", "phase": "start", "session_id": "P01"})
 print(s.recv_json())  # {"status": "ok", "seq": ..., "t": ..., "t_mono": ...}
 ```
 
+## Visualisation
+
+Live visualiser of position and (optional) velocity, acceleration, jerk. Similarly to the subscriber run the visualiser from the host. 
+
+```bash
+python3 cmd_publisher.visualiser
+```
+
+Additional arguments:
+- `--derivatives` 1-4 (default 1), 
+- `--window` rolling seconds. 
+
+Button presses are red verticals, `session_mark` purple dashed. Press `s` to save the focused window, `S` saves all.
+
 ## Unit Tests
 ```bash
 python -m venv .venv && . .venv/bin/activate
