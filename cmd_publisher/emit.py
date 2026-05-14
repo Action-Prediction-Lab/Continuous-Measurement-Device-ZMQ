@@ -45,14 +45,22 @@ class Emitter:
         self._fp.flush()
         os.fsync(self._fp.fileno())
 
-        self._pub.send_json(record, flags=zmq.NOBLOCK)
+        self._send_best_effort(record)
         return record
 
     def emit_wire_only(self, partial: dict) -> dict:
         """Stamp and publish to wire only."""
         record = self._assemble(partial, kernel_t_mono_ns=None)
-        self._pub.send_json(record, flags=zmq.NOBLOCK)
+        self._send_best_effort(record)
         return record
+
+    def _send_best_effort(self, record: dict) -> None:
+        """Send the record on the wire. Drop silently on a slow subscriber
+        (zmq.Again) or after the asyncio loop has closed (RuntimeError)."""
+        try:
+            self._pub.send_json(record, flags=zmq.NOBLOCK)
+        except (zmq.Again, RuntimeError):
+            pass
 
     def emit_file_only(self, partial: dict) -> dict:
         """Stamp and write to disk only (meta path)."""
