@@ -1,12 +1,19 @@
 """Device discovery, exclusive grab, and CLOCK_MONOTONIC timestamping."""
 from __future__ import annotations
+import fcntl
 import logging
+import struct
 import time
 
 import evdev
 
 
 logger = logging.getLogger(__name__)
+
+
+# EVIOCSCLOCKID from <linux/input.h>: _IOW('E', 0xa0, int)
+# = (1 << 30) | (sizeof(int) << 16) | ('E' << 8) | 0xa0
+_EVIOCSCLOCKID = 0x400445a0
 
 
 class DeviceNotFoundError(Exception):
@@ -50,10 +57,11 @@ def grab_and_set_monotonic_clock(device: evdev.InputDevice) -> None:
     """Grab the device and set its evdev clock to CLOCK_MONOTONIC.
 
     Raises OSError if the grab fails (EBUSY when another process holds the grab)
-    or the clock change fails.
+    or the clock change fails. python-evdev does not expose EVIOCSCLOCKID, so the
+    ioctl is issued directly.
     """
     device.grab()
-    device.set_clock(time.CLOCK_MONOTONIC)
+    fcntl.ioctl(device.fd, _EVIOCSCLOCKID, struct.pack("i", time.CLOCK_MONOTONIC))
 
 
 def device_info_for_meta(device: evdev.InputDevice, vid_hex: str, pid_hex: str) -> dict:
