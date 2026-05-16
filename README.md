@@ -15,8 +15,10 @@ Plug in the USB knob.
 ```bash
 git clone https://github.com/Action-Prediction-Lab/Continuous-Measurement-Device-ZMQ.git
 cp .env.example .env
-docker compose up --build
+docker compose up
 ```
+
+The first run pulls `ghcr.io/action-prediction-lab/cmd-zmq:v1.0` from GHCR. To build from local source instead, run `docker compose up --build`.
 
 ### Test
 In a second terminal on the host (the subscriber needs `pyzmq` available; if you have not set up a host-side venv yet, see *Unit Tests* below):
