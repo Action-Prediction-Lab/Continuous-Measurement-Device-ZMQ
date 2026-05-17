@@ -1,6 +1,6 @@
 services:
   publisher:
-    image: ghcr.io/action-prediction-lab/cmd-zmq:v1.0
+    image: ghcr.io/action-prediction-lab/cmd-zmq:latest
     build: ./cmd_publisher
     privileged: true
     volumes:
